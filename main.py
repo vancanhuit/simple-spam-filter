@@ -1,22 +1,29 @@
-import helpers
 import re
-import os
+import collections
+import math
+import helpers
 
-file_name = './datasets/3-1msg1.txt'
+data = [
+    'hanoi pho chaolong hanoi',
+    'hanoi buncha pho omai',
+    'pho banhgio omai',
+    'saigon hutiu banhbo pho'
+]
 
-data = helpers.process_data(file_name)
-print(data)
-bags_of_words = helpers.create_bags_of_words(data)
+target = ['B', 'B', 'B', 'N']
+labels = helpers.get_labels(target)
 
-train_data = []
-train_target = []
+bags_of_words = [
+    collections.Counter(re.findall(r'\w+', text)) for text in data
+]
 
-match = re.match(r'^spm', os.path.basename(file_name))
-label = 'non-spam'
-if match is not None:
-    label = 'spam'
-train_labels.append(label)
+words = helpers.get_words(bags_of_words)
 
-train_dataset.append(bags_of_words)
-print(train_dataset)
-print(train_labels)
+text1 = 'hanoi hanoi buncha hutiu'
+
+label1 = helpers.predict(bags_of_words, words, target, labels, text1)
+print(label1)
+
+text2 = 'pho hutiu banhbo'
+label2 = helpers.predict(bags_of_words, words, target, labels, text2)
+print(label2)

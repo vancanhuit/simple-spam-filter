@@ -1,34 +1,72 @@
 import re
 import collections
 import os
-from nltk.corpus import stopwords
-from nltk.stem.porter import PorterStemmer
+import math
 
 
-def process_data(file_name):
-    """ This function pre-processing data from file """
-    data = ''
-    with open(file_name, 'r') as f:
-        data = f.read()
+def prior(target, label):
+    ''' Calculate prior probability for a label '''
+    count = 0
+    for t in target:
+        if t == label:
+            count += 1
 
-    data = data.lower()
-    stop_words = set(stopwords.words('english'))
-    non_words = re.compile(r'[^A-Za-z]+')
-
-    # Remove all non-words characters in string
-    data = re.sub(non_words, ' ', data)
-
-    # Used for stemming words in string
-    porter_stemmer = PorterStemmer()
-
-    # Stemming each word in string which is not a stop word
-    data = ' '.join(
-        [porter_stemmer.stem(w) for w in data.split() if w not instop_words])
-
-    return data
+    return count / len(target)
 
 
-def create_bags_of_words(text):
-    """ Create bags of words from text string"""
-    bags_of_words = collections.Counter(re.findall(r'\w+', text))
-    return bags_of_words
+def get_labels(target):
+    ''' Get all labels from target '''
+    return list(set(target))
+
+
+def get_words(bags_of_words):
+    ''' Get all words from bags of words '''
+    words = set()
+    for row in bags_of_words:
+        words = words.union(set(row.keys()))
+
+    return words
+
+
+def get_total_words(text):
+    ''' Get all words in the text '''
+    values = text.values()
+    return sum(values)
+
+
+def posterior(bags_of_words, words, word, target, label):
+    ''' Calculate posterior probability of the word given label '''
+    count = 0
+    total = 0
+    for index, row in enumerate(bags_of_words):
+        if target[index] == label:
+            if word in row.keys():
+                count += row.get(word)
+            total += get_total_words(row)
+
+    # Normalize using Lagrange Smoothing
+    return (count + 1) / (total + len(words))
+
+
+def predict(bags_of_words, words, target, labels, text):
+    ''' Predict a label for a given text '''
+    test_words = text.split()
+
+    log_probs_per_label = []
+
+    # Calculate log-probability of each word for each label
+    for word in test_words:
+        logs = [
+            math.log(posterior(
+                bags_of_words, words, word, target, label)) for label in labels
+        ]
+        log_probs_per_label.append(logs)
+
+    result_each_label = []
+    for index, label in enumerate(labels):
+        result = math.log(prior(target, label))
+        for i, word in enumerate(test_words):
+            result += log_probs_per_label[i][index]
+        result_each_label.append(result)
+
+    return labels[result_each_label.index(max(result_each_label))]
