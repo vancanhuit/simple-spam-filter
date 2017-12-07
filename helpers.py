@@ -2,6 +2,7 @@ import re
 import collections
 import os
 import math
+from functools import partial
 
 
 def prior(target, label):
@@ -45,7 +46,9 @@ def posterior(bags_of_words, words, word, target, label):
             total += get_total_words(row)
 
     # Normalize using Lagrange smoothing
-    return (count + 1) / (total + len(words))
+    prob = (count + 1) / (total + len(words))
+    # print('p({}|{}): {}'.format(word, label, prob))
+    return prob
 
 
 def predict(bags_of_words, words, target, labels, text):
@@ -56,10 +59,8 @@ def predict(bags_of_words, words, target, labels, text):
 
     # Calculate log-probability of each word for each label
     for word in test_words:
-        logs = [
-            math.log(posterior(
-                bags_of_words, words, word, target, label)) for label in labels
-        ]
+        post_prob = partial(posterior, bags_of_words, words, word, target)
+        logs = [math.log(post_prob(label)) for label in labels]
         log_probs_per_label.append(logs)
 
     # Calculate final result for each label
@@ -70,5 +71,7 @@ def predict(bags_of_words, words, target, labels, text):
             result += log_probs_per_label[pos][index]
         result_each_label.append(result)
 
+    # print(labels)
+    # print(result_each_label)
     # Select label which has greatest result
     return labels[result_each_label.index(max(result_each_label))]
