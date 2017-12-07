@@ -66,8 +66,8 @@ def predict(bags_of_words, words, target, labels, text):
     result_each_label = []
     for index, label in enumerate(labels):
         result = math.log(prior(target, label))
-        for i, word in enumerate(test_words):
-            result += log_probs_per_label[i][index]
+        for pos, word in enumerate(test_words):
+            result += log_probs_per_label[pos][index]
         result_each_label.append(result)
 
     # Select label which has greatest result
