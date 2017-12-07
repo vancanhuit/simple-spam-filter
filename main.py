@@ -1,7 +1,7 @@
 import re
 import collections
-import math
 import helpers
+from functools import partial
 
 data = [
     'hanoi pho chaolong hanoi',
@@ -19,11 +19,13 @@ bags_of_words = [
 
 words = helpers.get_words(bags_of_words)
 
+predictor = partial(helpers.predict, bags_of_words, words, target, labels)
+
 text1 = 'hanoi hanoi buncha hutiu'
 
-label1 = helpers.predict(bags_of_words, words, target, labels, text1)
+label1 = predictor(text1)
 print(label1)
 
 text2 = 'pho hutiu banhbo'
-label2 = helpers.predict(bags_of_words, words, target, labels, text2)
+label2 = predictor(text2)
 print(label2)

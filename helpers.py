@@ -44,7 +44,7 @@ def posterior(bags_of_words, words, word, target, label):
                 count += row.get(word)
             total += get_total_words(row)
 
-    # Normalize using Lagrange Smoothing
+    # Normalize using Lagrange smoothing
     return (count + 1) / (total + len(words))
 
 
@@ -62,6 +62,7 @@ def predict(bags_of_words, words, target, labels, text):
         ]
         log_probs_per_label.append(logs)
 
+    # Calculate final result for each label
     result_each_label = []
     for index, label in enumerate(labels):
         result = math.log(prior(target, label))
@@ -69,4 +70,5 @@ def predict(bags_of_words, words, target, labels, text):
             result += log_probs_per_label[i][index]
         result_each_label.append(result)
 
+    # Select label which has greatest result
     return labels[result_each_label.index(max(result_each_label))]
