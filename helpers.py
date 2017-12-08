@@ -44,7 +44,7 @@ def load_dataset(data_path):
     data = []
     target = []
     for file_name in os.listdir(data_path):
-        label, text = load_file(data_path + "/" + file_name)
+        label, text = load_file(os.path.join(data_path, file_name))
         data.append(text)
         target.append(label)
 
