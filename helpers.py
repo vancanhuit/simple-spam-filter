@@ -29,7 +29,7 @@ def load_file(file_name):
     label = ''
     with open(file_name, 'r') as f:
         text = f.read()
-    
+
     spam = re.match(r'^spm', os.path.basename(file_name))
     if spam is not None:
         label = 'spam'
