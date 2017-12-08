@@ -1,8 +1,11 @@
+import sys
 from functools import partial
 import helpers
 
-train_dataset_path = r'./datasets/train/part1'
-test_dataset_path = r'./datasets/test/part1'
+args = sys.argv
+
+train_dataset_path = args[1]
+test_dataset_path = args[2]
 
 train_target, train_data = helpers.load_dataset(train_dataset_path)
 # print('Train dataset size: {}'.format(len(train_target)))
@@ -28,4 +31,4 @@ for index, data in enumerate(test_data):
 
 test_data_size = len(test_data)
 
-print('Ratio: {}%'.format(count / test_data_size * 100))
+print('Ratio: {0:.2f}%'.format(count / test_data_size * 100))
