@@ -6,5 +6,5 @@
 ## Run program
 
 ```sh
-python main.py /path/to/train_dataset /path/to/test_dataset
+python3 main.py /path/to/train_dataset /path/to/test_dataset
 ```
