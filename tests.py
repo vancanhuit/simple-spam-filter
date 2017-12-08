@@ -1,4 +1,5 @@
 import pytest
+import collections
 import helpers
 
 
@@ -41,3 +42,15 @@ class TestClass(object):
 
         prob = helpers.posterior(bags_of_words, words, word, target, label)
         assert prob == pytest.approx(3 / 8)
+
+    def test_create_bags_of_words(self):
+        data = ['Textual text 1', 'Textual text 2']
+        bags_of_words = helpers.create_bags_of_words(data)
+
+        txt = bags_of_words[0]
+
+        print('\nBags of words: {}'.format(bags_of_words))
+        assert len(bags_of_words) == 2
+        assert type(txt) is collections.Counter
+        assert 'text' in txt.keys()
+        assert txt['text'] == 1

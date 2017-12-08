@@ -51,6 +51,15 @@ def load_dataset(data_path):
     return target, data
 
 
+def create_bags_of_words(data):
+    ''' Create bags of words from data '''
+    bags_of_words = []
+    for d in data:
+        process_data = pre_process_text(d)
+        bags_of_words.append(process_data)
+    return bags_of_words
+
+
 def prior(target, label):
     ''' Calculate prior probability for a label '''
     count = 0
