@@ -9,6 +9,8 @@ class TestClass(object):
         target = ['A', 'A', 'A', 'B']
         prob_A = helpers.prior(target, 'A')
         prob_B = helpers.prior(target, 'B')
+        print(prob_A)
+        print(prob_B)
         assert prob_A == pytest.approx(0.75)
         assert prob_B == pytest.approx(0.25)
 
@@ -22,6 +24,7 @@ class TestClass(object):
     def test_get_words(self):
         bags_of_words = [{'aa': 2, 'bb': 1, 'cc': 3}, {'cc': 2, 'dd': 1}]
         words = helpers.get_words(bags_of_words)
+        print(words)
         assert len(words) == 4
         assert 'aa' in words
         assert 'bb' in words
@@ -41,10 +44,20 @@ class TestClass(object):
         label = 'A'
 
         prob = helpers.posterior(bags_of_words, words, word, target, label)
+        print(prob)
         assert prob == pytest.approx(3 / 8)
 
+    def test_pre_process_text(self):
+        text = 'a is go'
+        new_text = helpers.pre_process_text(text)
+        print(new_text)
+        assert type(new_text) is collections.Counter
+        assert 'is' not in new_text.keys()
+        assert 'a' not in new_text.keys()
+        assert new_text['go'] == 1
+
     def test_create_bags_of_words(self):
-        data = ['Textual text 1', 'Textual text 2']
+        data = ['aa bb cc cc', 'aa bb bb cc']
         bags_of_words = helpers.create_bags_of_words(data)
 
         txt = bags_of_words[0]
@@ -52,5 +65,5 @@ class TestClass(object):
         print('\nBags of words: {}'.format(bags_of_words))
         assert len(bags_of_words) == 2
         assert type(txt) is collections.Counter
-        assert 'text' in txt.keys()
-        assert txt['text'] == 1
+        assert 'aa' in txt.keys()
+        assert txt['aa'] == 1
