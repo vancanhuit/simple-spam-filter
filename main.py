@@ -31,4 +31,4 @@ for index, data in enumerate(test_data):
 
 test_data_size = len(test_data)
 
-print('Ratio: {0:.2f}%'.format(count / test_data_size * 100))
+print('Accuracy: {0:.2f}%'.format(count / test_data_size * 100))
