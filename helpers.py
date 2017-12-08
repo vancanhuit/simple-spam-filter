@@ -39,11 +39,11 @@ def posterior(bags_of_words, words, word, target, label):
     ''' Calculate posterior probability of the word given label '''
     count = 0
     total = 0
-    for index, row in enumerate(bags_of_words):
+    for index, text in enumerate(bags_of_words):
         if target[index] == label:
-            if word in row.keys():
-                count += row.get(word)
-            total += get_total_words(row)
+            if word in text.keys():
+                count += text.get(word)
+            total += get_total_words(text)
 
     # Normalize using Lagrange smoothing
     prob = (count + 1) / (total + len(words))
@@ -51,27 +51,40 @@ def posterior(bags_of_words, words, word, target, label):
     return prob
 
 
-def predict(bags_of_words, words, target, labels, text):
-    ''' Predict a label for a given text '''
-    test_words = text.split()
+def get_label_probs(target, labels):
+    ''' Calculate prior probability for each label '''
+    probs = [prior(target, label) for label in labels]
+    return probs
 
-    log_probs_per_label = []
 
-    # Calculate log-probability of each word for each label
-    for word in test_words:
+def get_probs_per_label(bags_of_words, words, target, labels):
+    ''' Calculate conditional probability of each word for each given label '''
+    logs = {}
+    for word in words:
         post_prob = partial(posterior, bags_of_words, words, word, target)
-        logs = [math.log(post_prob(label)) for label in labels]
-        log_probs_per_label.append(logs)
+        logs[word] = [post_prob(label) for label in labels]
 
-    # Calculate final result for each label
+    return logs
+
+
+def train(bags_of_words, words, target, labels):
+    label_probs = get_label_probs(target, labels)
+    log_probs_per_label = get_probs_per_label(
+        bags_of_words, words, target, labels)
+
+    return (label_probs, log_probs_per_label)
+
+
+def predict(label_probs, probs_per_label, words, labels, text):
+    test_words = text.split()
     result_each_label = []
-    for index, label in enumerate(labels):
-        result = math.log(prior(target, label))
-        for pos, word in enumerate(test_words):
-            result += log_probs_per_label[pos][index]
+
+    for index, prob in enumerate(label_probs):
+        result = math.log(prob)
+        for word in test_words:
+            if word in words:
+                result += math.log(probs_per_label[word][index])
+
         result_each_label.append(result)
 
-    # print(labels)
-    # print(result_each_label)
-    # Select label which has greatest result
     return labels[result_each_label.index(max(result_each_label))]
