@@ -24,7 +24,7 @@ def pre_process_text(text):
 
 
 def load_file(file_name):
-    ''' Load data and label from file '''
+    ''' Load data and labels from file '''
     text = ''
     label = ''
     with open(file_name, 'r') as f:
@@ -124,10 +124,10 @@ def get_probs_per_label(bags_of_words, words, target, labels):
 
 def train(bags_of_words, words, target, labels):
     label_probs = get_label_probs(target, labels)
-    log_probs_per_label = get_probs_per_label(
+    probs_per_label = get_probs_per_label(
         bags_of_words, words, target, labels)
 
-    return (label_probs, log_probs_per_label)
+    return (label_probs, probs_per_label)
 
 
 def predict(label_probs, probs_per_label, words, labels, text):

@@ -1,43 +1,31 @@
-import collections
-import re
 from functools import partial
 import helpers
 
-data = [
-    'Chinese Beijing Chinese',
-    'Chinese Chinese Shanghai',
-    'Chinese Macao',
-    'Tokyo Japan Chinese'
-]
+train_dataset_path = r'./datasets/train/part1'
+test_dataset_path = r'./datasets/test/part1'
 
-target = ['C', 'C', 'C', 'J']
-labels = helpers.get_labels(target)
+train_target, train_data = helpers.load_dataset(train_dataset_path)
+# print('Train dataset size: {}'.format(len(train_target)))
 
-bags_of_words = [
-    collections.Counter(re.findall(r'\w+', text)) for text in data
-]
+bags_of_words = helpers.create_bags_of_words(train_data)
+# print('Bags of words: {}'.format(bags_of_words))
 
 words = helpers.get_words(bags_of_words)
+labels = helpers.get_labels(train_target)
 
 label_probs, probs_per_label = helpers.train(
-    bags_of_words, words, target, labels)
-
-print('Bags of words: {}'.format(bags_of_words))
-print('Words: {}'.format(words))
-print('Labels: {}'.format(labels))
-print('Label probs: {}'.format(label_probs))
-print('Probs per label: {}'.format(probs_per_label))
+    bags_of_words, words, train_target, labels)
 
 predictor = partial(
     helpers.predict, label_probs, probs_per_label, words, labels)
 
-text1 = 'Chinsese Chinese Chinese Tokyo Japan'
-label1 = predictor(text1)
-print('Found label: {}'.format(label1))
+count = 0
+test_target, test_data = helpers.load_dataset(test_dataset_path)
+for index, data in enumerate(test_data):
+    label = predictor(data)
+    if label == test_target[index]:
+        count += 1
 
-# predictor = partial(helpers.predict, bags_of_words, words, target, labels)
+test_data_size = len(test_data)
 
-# text1 = 'Chinese Chinese Chinese Tokyo Japan'
-
-# label1 = predictor(text1)
-# print(label1)
+print('Ratio: {}%'.format(count / test_data_size * 100))
