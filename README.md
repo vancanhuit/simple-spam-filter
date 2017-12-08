@@ -8,3 +8,9 @@
 ```sh
 python3 main.py /path/to/train_dataset /path/to/test_dataset
 ```
+
+For example:
+
+```
+python3 main.py ./datasets/train/part1 ./datasets/test/part1
+```
