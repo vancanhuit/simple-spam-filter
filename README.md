@@ -12,5 +12,5 @@ python3 main.py /path/to/train_dataset /path/to/test_dataset
 For example:
 
 ```
-python3 main.py ./datasets/train/part1 ./datasets/test/part1
+python3 main.py ./datasets/part1/train ./datasets/part1/test
 ```
