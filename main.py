@@ -24,7 +24,7 @@ label_probs, probs_per_label = helpers.train(
 
 print('Bags of words: {}'.format(bags_of_words))
 print('Words: {}'.format(words))
-print('Lables: {}'.format(labels))
+print('Labels: {}'.format(labels))
 print('Label probs: {}'.format(label_probs))
 print('Probs per label: {}'.format(probs_per_label))
 

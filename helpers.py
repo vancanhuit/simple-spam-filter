@@ -1,8 +1,49 @@
 import re
 import collections
-import os
 import math
+import os
+
+from nltk.corpus import stopwords
+from nltk.stem.porter import PorterStemmer
 from functools import partial
+
+
+def pre_process_text(text):
+    stop_words = set(stopwords.words('english'))
+    non_words = re.compile(r'[^A-Za-z]+')
+
+    data = re.sub(non_words, ' ', text.lower())
+
+    porter_stemmer = PorterStemmer()
+    words = [
+        porter_stemmer.stem(w) for w in data.split() if w not in stop_words]
+    return collections.Counter(words)
+
+
+def load_file(file_name):
+    text = ''
+    label = ''
+    with open(file_name, 'r') as f:
+        text = f.read()
+    
+    spam = re.match(r'^spm', os.path.basename(file_name))
+    if spam is not None:
+        label = 'spam'
+    else:
+        label = 'non-spam'
+
+    return label, text
+
+
+def load_dataset(data_path):
+    data = []
+    target = []
+    for file in os.listdir(data_path):
+        label, text = load_file(data_path + "/" + file)
+        data.append(text)
+        target.append(label)
+
+    return target, data
 
 
 def prior(target, label):
