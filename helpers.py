@@ -143,3 +143,14 @@ def predict(label_probs, probs_per_label, words, labels, text):
         result_each_label.append(result)
 
     return labels[result_each_label.index(max(result_each_label))]
+
+
+def get_accuracy(test_data, test_target, predictor):
+    count = 0
+    for index, data in enumerate(test_data):
+        label = predictor(data)
+        if label == test_target[index]:
+            count += 1
+
+    test_data_size = len(test_data)
+    return count / test_data_size

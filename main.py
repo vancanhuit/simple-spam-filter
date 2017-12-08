@@ -22,13 +22,7 @@ label_probs, probs_per_label = helpers.train(
 predictor = partial(
     helpers.predict, label_probs, probs_per_label, words, labels)
 
-count = 0
 test_target, test_data = helpers.load_dataset(test_dataset_path)
-for index, data in enumerate(test_data):
-    label = predictor(data)
-    if label == test_target[index]:
-        count += 1
+accuarcy = helpers.get_accuracy(test_data, test_target, predictor)
 
-test_data_size = len(test_data)
-
-print('Accuracy: {0:.2f}%'.format(count / test_data_size * 100))
+print('Accuracy: {0:.2f}%'.format(accuarcy * 100))
