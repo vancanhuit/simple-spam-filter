@@ -9,11 +9,14 @@ from functools import partial
 
 
 def pre_process_text(text):
+    ''' Pre-process textual data loaded from file '''
     stop_words = set(stopwords.words('english'))
     non_words = re.compile(r'[^A-Za-z]+')
 
+    # Lowercase text and remove non-words characters
     data = re.sub(non_words, ' ', text.lower())
 
+    # Stem each word in text which is not a stop word
     porter_stemmer = PorterStemmer()
     words = [
         porter_stemmer.stem(w) for w in data.split() if w not in stop_words]
@@ -21,6 +24,7 @@ def pre_process_text(text):
 
 
 def load_file(file_name):
+    ''' Load data and label from file '''
     text = ''
     label = ''
     with open(file_name, 'r') as f:
@@ -36,10 +40,11 @@ def load_file(file_name):
 
 
 def load_dataset(data_path):
+    ''' Load data in a directory '''
     data = []
     target = []
-    for file in os.listdir(data_path):
-        label, text = load_file(data_path + "/" + file)
+    for file_name in os.listdir(data_path):
+        label, text = load_file(data_path + "/" + file_name)
         data.append(text)
         target.append(label)
 
