@@ -1,6 +1,6 @@
 # Simple text classification using Multinomial Naive Bayes
 
-## Data set
+## Dataset
 [Ling-Spam dataset](http://csmining.org/index.php/ling-spam-datasets.html)
 
 ## Run program
