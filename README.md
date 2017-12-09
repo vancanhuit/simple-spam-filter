@@ -10,12 +10,12 @@
 - [NLTK](http://www.nltk.org/)
 - Install additional NLTK packages:
 
-```sh
-$ python3
->> import nltk
->> nltk.download('stopwords')
->> nltk.download('wordnet')
-```
+    ```sh
+    $ python3
+    >> import nltk
+    >> nltk.download('stopwords')
+    >> nltk.download('wordnet')
+    ```
 
 ## Run program
 
