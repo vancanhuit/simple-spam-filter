@@ -8,7 +8,8 @@ args = sys.argv
 
 # Path for storing model file
 model_path = os.path.join(os.getcwd(), 'models')
-input_path = args[1]
+input_path = os.path.abspath(args[1])
+print('Test data path: {}'.format(input_path))
 
 print('Getting model...')
 result = None

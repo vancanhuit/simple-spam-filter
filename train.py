@@ -3,8 +3,10 @@ import pickle
 import os
 import helpers
 
+""" Train data and store model to file """
 args = sys.argv
-train_dataset_path = args[1]
+train_dataset_path = os.path.abspath(args[1])
+print('Dataset path: {}'.format(train_dataset_path))
 
 print('Loading dataset...')
 train_target, train_data = helpers.load_dataset(train_dataset_path)
