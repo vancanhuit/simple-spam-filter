@@ -1,28 +1,37 @@
+import pickle
 import sys
+import os
 from functools import partial
 import helpers
 
 args = sys.argv
 
-train_dataset_path = args[1]
-test_dataset_path = args[2]
+# Path for storing model file
+model_path = os.path.join(os.getcwd(), 'models')
+input_path = args[1]
 
-train_target, train_data = helpers.load_dataset(train_dataset_path)
-# print('Train dataset size: {}'.format(len(train_target)))
+print('Getting model...')
+result = None
+with open(os.path.join(model_path, 'train.pickle'), 'rb') as f:
+    result = pickle.load(f)
 
-bags_of_words = helpers.create_bags_of_words(train_data)
-# print('Bags of words: {}'.format(bags_of_words))
+label_probs = result[0]
+probs_per_label = result[1]
+words = result[2]
+labels = result[3]
 
-words = helpers.get_words(bags_of_words)
-labels = helpers.get_labels(train_target)
+predictor = partial(helpers.predict,
+                    label_probs, probs_per_label, words, labels)
 
-label_probs, probs_per_label = helpers.train(
-    bags_of_words, words, train_target, labels)
+if os.path.isdir(input_path):
+    print('Loading dataset...')
+    test_target, test_data = helpers.load_dataset(input_path)
 
-predictor = partial(
-    helpers.predict, label_probs, probs_per_label, words, labels)
-
-test_target, test_data = helpers.load_dataset(test_dataset_path)
-accuarcy = helpers.get_accuracy(test_data, test_target, predictor)
-
-print('Accuracy: {0:.2f}%'.format(accuarcy * 100))
+    print('Testing dataset...')
+    accuracy = helpers.get_accuracy(test_data, test_target, predictor)
+    print('Accuracy: {0:.2f}%'.format(accuracy * 100))
+else:
+    label, text = helpers.load_file(input_path)
+    predict_label = predictor(text)
+    print('Expected label for the text: {}'.format(label))
+    print('Predicted label for the text: {}'.format(predict_label))
