@@ -27,3 +27,8 @@ with open(os.path.join(model_path, 'train.pickle'), 'wb') as f:
     pickle.dump((label_probs, probs_per_label, words, labels), f)
 
 print('Training done.')
+print('============== INFO ===============')
+print('Dataset size: {}'.format(len(bags_of_words)))
+print('Total words: {}'.format(len(words)))
+print('Labels: {}'.format(labels))
+print('Label probs: {}'.format(label_probs))
