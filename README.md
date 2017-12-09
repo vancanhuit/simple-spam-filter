@@ -12,5 +12,5 @@ python3 train.py /path/to/train_dataset
 
 Test:
 ```
-python3 main.py ./datasets/part1/test
+python3 main.py ./path/to/test_dataset
 ```
