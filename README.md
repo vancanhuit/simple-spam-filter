@@ -21,7 +21,7 @@
     >> nltk.download('wordnet')
     ```
 
-## Run program
+## CLI
 
 Train:
 
@@ -33,4 +33,10 @@ Test:
 
 ```sh
 python3 main.py /path/to/test_dataset
+```
+
+## GUI
+
+```sh
+python main.py
 ```
