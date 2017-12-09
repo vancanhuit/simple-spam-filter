@@ -7,7 +7,11 @@
 ## Tools
 
 - Python 3.5+
-- [NLTK](http://www.nltk.org/)
+- [NLTK](http://www.nltk.org/):
+
+    ```sh
+    [sudo] pip install nltk
+    ```
 - Install additional NLTK packages:
 
     ```sh
