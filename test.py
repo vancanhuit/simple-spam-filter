@@ -11,7 +11,7 @@ model_path = os.path.join(os.getcwd(), 'models')
 input_path = os.path.abspath(args[1])
 print('Test data path: {}'.format(input_path))
 
-print('Getting model...')
+# print('Getting model...')
 result = None
 with open(os.path.join(model_path, 'train.pickle'), 'rb') as f:
     result = pickle.load(f)
@@ -25,14 +25,18 @@ predictor = partial(helpers.predict,
                     label_probs, probs_per_label, words, labels)
 
 if os.path.isdir(input_path):
-    print('Loading dataset...')
+    # print('Loading dataset...')
     test_target, test_data = helpers.load_dataset(input_path)
 
-    print('Testing dataset...')
+    # print('Testing dataset...')
+    print("============= RESULT ===============")
     accuracy = helpers.get_accuracy(test_data, test_target, predictor)
     print('Accuracy: {0:.2f}%'.format(accuracy * 100))
+    print('=====================================')
 else:
     label, tokens = helpers.load_file(input_path)
     predict_label = predictor(tokens)
+    print('================= RESULT ================')
     print('Expected label for the text: {}'.format(label))
     print('Predicted label for the text: {}'.format(predict_label))
+    print('==========================================')

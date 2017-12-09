@@ -1,38 +1,64 @@
-import pickle
+import tkinter
+import subprocess
 import sys
-import os
-from functools import partial
-import helpers
+from tkinter import filedialog
 
-args = sys.argv
 
-# Path for storing model file
-model_path = os.path.join(os.getcwd(), 'models')
-input_path = os.path.abspath(args[1])
-print('Test data path: {}'.format(input_path))
+class GUI(object):
+    def __init__(self, parent):
+        self.parent = parent
+        self.frame = tkinter.Frame(parent)
+        self.frame.pack()
 
-print('Getting model...')
-result = None
-with open(os.path.join(model_path, 'train.pickle'), 'rb') as f:
-    result = pickle.load(f)
+        self.btn1 = tkinter.Button(
+            self.frame, text='Choose train directory', command=train)
+        self.btn1.pack()
 
-label_probs = result[0]
-probs_per_label = result[1]
-words = result[2]
-labels = result[3]
+        self.btn2 = tkinter.Button(
+            self.frame, text='Choose test file', command=test_single_data)
+        self.btn2.pack()
 
-predictor = partial(helpers.predict,
-                    label_probs, probs_per_label, words, labels)
+        self.btn3 = tkinter.Button(
+            self.frame, text='Choose test directory', command=test_dataset)
+        self.btn3.pack()
 
-if os.path.isdir(input_path):
-    print('Loading dataset...')
-    test_target, test_data = helpers.load_dataset(input_path)
+        self.scroll = tkinter.Scrollbar(self.frame)
+        self.scroll.pack(side=tkinter.RIGHT, fill=tkinter.Y)
+        self.text = tkinter.Text(self.frame, height=40, width=80)
+        self.text.pack(side=tkinter.LEFT, fill=tkinter.Y)
 
-    print('Testing dataset...')
-    accuracy = helpers.get_accuracy(test_data, test_target, predictor)
-    print('Accuracy: {0:.2f}%'.format(accuracy * 100))
-else:
-    label, text = helpers.load_file(input_path)
-    predict_label = predictor(text)
-    print('Expected label for the text: {}'.format(label))
-    print('Predicted label for the text: {}'.format(predict_label))
+        self.scroll.config(command=self.text.yview)
+        self.text.config(yscrollcommand=self.scroll.set)
+
+
+def train():
+    train_dir = filedialog.askdirectory()
+    p = subprocess.Popen(
+        ['python', 'train.py', train_dir],
+        stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    output, errors = p.communicate()
+    gui.text.insert(tkinter.END, output)
+
+
+def test_single_data():
+    test_file = filedialog.askopenfile()
+    p = subprocess.Popen(
+        ['python', 'test.py', test_file.name],
+        stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    output, errors = p.communicate()
+    gui.text.insert(tkinter.END, output)
+
+
+def test_dataset():
+    test_dir = filedialog.askdirectory()
+    p = subprocess.Popen(
+        ['python', 'test.py', test_dir],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE)
+    output, errors = p.communicate()
+    gui.text.insert(tkinter.END, output)
+
+root = tkinter.Tk()
+root.title('Simple text classification')
+gui = GUI(root)
+root.mainloop()
