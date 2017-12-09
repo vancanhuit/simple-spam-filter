@@ -16,6 +16,8 @@ words = helpers.get_words(bags_of_words)
 labels = helpers.get_labels(train_target)
 
 model_path = os.path.join(os.getcwd(), 'models')
+if not os.path.exists(model_path):
+    os.mkdir(model_path)
 
 print('Training data...')
 label_probs, probs_per_label = helpers.train(

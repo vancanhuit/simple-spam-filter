@@ -149,8 +149,11 @@ def get_accuracy(test_data, test_target, predictor):
     count = 0
     for index, data in enumerate(test_data):
         label = predictor(data)
+        print('{}. Expected label: {} - Predicted label: {}'.format(
+            index, test_target[index], label))
         if label == test_target[index]:
             count += 1
 
     test_data_size = len(test_data)
+    print('Result: {} / {}'.format(count, test_data_size))
     return count / test_data_size
