@@ -28,5 +28,5 @@ python3 train.py /path/to/train_dataset
 Test:
 
 ```sh
-python3 main.py ./path/to/test_dataset
+python3 main.py /path/to/test_dataset
 ```
