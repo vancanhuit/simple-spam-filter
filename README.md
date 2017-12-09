@@ -5,12 +5,12 @@
 
 ## Run program
 
+Train:
 ```sh
-python3 main.py /path/to/train_dataset /path/to/test_dataset
+python3 train.py /path/to/train_dataset
 ```
 
-For example:
-
+Test:
 ```
-python3 main.py ./datasets/part1/train ./datasets/part1/test
+python3 main.py ./datasets/part1/test
 ```
