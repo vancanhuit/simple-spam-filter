@@ -18,9 +18,9 @@ def pre_process_text(text):
 
     # Stem each word in text which is not a stop word
     porter_stemmer = PorterStemmer()
-    words = [
+    tokens = [
         porter_stemmer.stem(w) for w in data.split() if w not in stop_words]
-    return collections.Counter(words)
+    return tokens
 
 
 def load_file(file_name):
@@ -30,13 +30,15 @@ def load_file(file_name):
     with open(file_name, 'r') as f:
         text = f.read()
 
+    tokens = pre_process_text(text)
+
     spam = re.match(r'^spm', os.path.basename(file_name))
     if spam is not None:
         label = 'spam'
     else:
         label = 'non-spam'
 
-    return label, text
+    return label, tokens
 
 
 def load_dataset(data_path):
@@ -44,8 +46,8 @@ def load_dataset(data_path):
     data = []
     target = []
     for file_name in os.listdir(data_path):
-        label, text = load_file(os.path.join(data_path, file_name))
-        data.append(text)
+        label, tokens = load_file(os.path.join(data_path, file_name))
+        data.append(tokens)
         target.append(label)
 
     return target, data
@@ -55,7 +57,7 @@ def create_bags_of_words(data):
     ''' Create bags of words from data '''
     bags_of_words = []
     for d in data:
-        process_data = pre_process_text(d)
+        process_data = collections.Counter(d)
         bags_of_words.append(process_data)
     return bags_of_words
 
@@ -130,13 +132,12 @@ def train(bags_of_words, words, target, labels):
     return (label_probs, probs_per_label)
 
 
-def predict(label_probs, probs_per_label, words, labels, text):
-    test_words = text.split()
+def predict(label_probs, probs_per_label, words, labels, tokens):
     result_each_label = []
 
     for index, prob in enumerate(label_probs):
         result = math.log(prob)
-        for word in test_words:
+        for word in tokens:
             if word in words:
                 result += math.log(probs_per_label[word][index])
 

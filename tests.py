@@ -51,13 +51,10 @@ class TestClass(object):
         text = 'a is go'
         new_text = helpers.pre_process_text(text)
         print(new_text)
-        assert type(new_text) is collections.Counter
-        assert 'is' not in new_text.keys()
-        assert 'a' not in new_text.keys()
-        assert new_text['go'] == 1
+        assert 'a' not in new_text
 
     def test_create_bags_of_words(self):
-        data = ['aa bb cc cc', 'aa bb bb cc']
+        data = [['aa', 'bb', 'cc' 'cc'], ['aa', 'bb', 'bb', 'cc']]
         bags_of_words = helpers.create_bags_of_words(data)
 
         txt = bags_of_words[0]
