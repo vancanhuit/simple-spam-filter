@@ -49,7 +49,7 @@ class GUI(object):
 def train():
     train_dir = filedialog.askdirectory()
     p = subprocess.Popen(
-        ['python', '-u', 'train.py', train_dir], shell=True,
+        ['python', '-u', 'train.py', train_dir],
         stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 
     while True:
@@ -62,7 +62,7 @@ def train():
 def test_single_data():
     test_file = filedialog.askopenfile()
     p = subprocess.Popen(
-        ['python', '-u', 'test.py', test_file.name], shell=True,
+        ['python', '-u', 'test.py', test_file.name],
         stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 
     while True:
@@ -75,7 +75,7 @@ def test_single_data():
 def test_dataset():
     test_dir = filedialog.askdirectory()
     p = subprocess.Popen(
-        ['python', '-u', 'test.py', test_dir], shell=True,
+        ['python', '-u', 'test.py', test_dir],
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT)
 
