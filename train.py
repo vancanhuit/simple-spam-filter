@@ -8,7 +8,7 @@ args = sys.argv
 train_dataset_path = os.path.abspath(args[1])
 print('Dataset path: {}'.format(train_dataset_path))
 
-# print('Loading dataset...')
+print('Loading dataset...')
 train_target, train_data = helpers.load_dataset(train_dataset_path)
 
 bags_of_words = helpers.create_bags_of_words(train_data)
@@ -19,10 +19,11 @@ model_path = os.path.join(os.getcwd(), 'models')
 if not os.path.exists(model_path):
     os.mkdir(model_path)
 
-# print('Training data...')
+print('Training data...')
 label_probs, probs_per_label = helpers.train(
     bags_of_words, words, train_target, labels)
 
+print('Serializing model...')
 with open(os.path.join(model_path, 'train.pickle'), 'wb') as f:
     pickle.dump((label_probs, probs_per_label, words, labels), f)
 
