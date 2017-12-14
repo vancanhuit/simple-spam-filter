@@ -20,6 +20,14 @@
     >> nltk.download('stopwords')
     >> nltk.download('wordnet')
     ```
+- Install pytest for unit testing (optional):
+    ```sh
+    [sudo] pip install pytest
+    ```
+    Run unit tests:
+    ```sh
+    pytest helper_tests.py
+    ```
 
 ## CLI
 
