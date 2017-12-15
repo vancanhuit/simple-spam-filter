@@ -10,7 +10,7 @@
 - [NLTK](http://www.nltk.org/):
 
     ```sh
-    [sudo] pip install nltk
+    [sudo] pip3 install nltk
     ```
 - Install additional NLTK packages:
 
@@ -22,7 +22,7 @@
     ```
 - Install pytest for unit testing (optional):
     ```sh
-    [sudo] pip install pytest
+    [sudo] pip3 install pytest
     ```
     Run unit tests:
     ```sh
@@ -46,5 +46,5 @@ python3 test.py /path/to/test_dataset
 ## GUI
 
 ```sh
-python main.py
+python3 main.py
 ```
