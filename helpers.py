@@ -80,15 +80,15 @@ def get_labels(target):
 def get_words(bags_of_words):
     ''' Get all words from bags of words '''
     words = set()
-    for row in bags_of_words:
-        words = words.union(set(row.keys()))
+    for doc in bags_of_words:
+        words = words.union(set(doc.keys()))
 
     return words
 
 
-def get_total_words(text):
-    ''' Get all words in the text '''
-    values = text.values()
+def get_total_words(doc):
+    ''' Get all words in the doc '''
+    values = doc.values()
     return sum(values)
 
 
@@ -96,11 +96,11 @@ def posterior(bags_of_words, words, word, target, label):
     ''' Calculate posterior probability of the word given label '''
     count = 0
     total = 0
-    for index, text in enumerate(bags_of_words):
+    for index, doc in enumerate(bags_of_words):
         if target[index] == label:
-            if word in text.keys():
-                count += text.get(word)
-            total += get_total_words(text)
+            if word in doc.keys():
+                count += doc.get(word)
+            total += get_total_words(doc)
 
     # Normalize using Lagrange smoothing
     prob = (count + 1) / (total + len(words))
@@ -116,12 +116,12 @@ def get_label_probs(target, labels):
 
 def get_probs_per_label(bags_of_words, words, target, labels):
     ''' Calculate conditional probability of each word for each given label '''
-    logs = {}
+    probs = {}
     for word in words:
         post_prob = partial(posterior, bags_of_words, words, word, target)
-        logs[word] = [post_prob(label) for label in labels]
+        probs[word] = [post_prob(label) for label in labels]
 
-    return logs
+    return probs
 
 
 def train(bags_of_words, words, target, labels):
@@ -140,9 +140,9 @@ def predict(label_probs, probs_per_label, words, labels, tokens):
         for word in tokens:
             if word in words:
                 result += math.log(probs_per_label[word][index])
-
         result_each_label.append(result)
 
+    # print('Result for each label: {}'.format(result_each_label))
     return labels[result_each_label.index(max(result_each_label))]
 
 

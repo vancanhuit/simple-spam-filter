@@ -23,7 +23,7 @@ print('Training data...')
 label_probs, probs_per_label = helpers.train(
     bags_of_words, words, train_target, labels)
 
-print('Serializing model...')
+print('Storing model...')
 with open(os.path.join(model_path, 'train.pickle'), 'wb') as f:
     pickle.dump((label_probs, probs_per_label, words, labels), f)
 
