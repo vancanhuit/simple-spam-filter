@@ -15,7 +15,7 @@ bags_of_words = helpers.create_bags_of_words(train_data)
 words = helpers.get_words(bags_of_words)
 labels = helpers.get_labels(train_target)
 
-model_path = os.path.join(os.getcwd(), 'models')
+model_path = os.path.join(os.getcwd(), 'model')
 if not os.path.exists(model_path):
     os.mkdir(model_path)
 

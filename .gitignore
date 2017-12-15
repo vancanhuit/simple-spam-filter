@@ -109,6 +109,6 @@ venv.bak/
 .history
 
 ### Specific project ###
-models/
+model/
 
 # End of https://www.gitignore.io/api/python,visualstudiocode

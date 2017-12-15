@@ -7,7 +7,7 @@ import helpers
 """ Test dataset """
 args = sys.argv
 
-model_path = os.path.join(os.getcwd(), 'models')
+model_path = os.path.join(os.getcwd(), 'model')
 input_path = os.path.abspath(args[1])
 print('Test data path: {}'.format(input_path))
 
