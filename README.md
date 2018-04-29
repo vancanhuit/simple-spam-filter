@@ -1,4 +1,4 @@
-# Simple text classification using Multinomial Naive Bayes
+# Simple spam filter using Multinomial Naive Bayes
 
 ## Dataset
 
